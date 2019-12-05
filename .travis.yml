@@ -1,10 +1,20 @@
 language: node_js
 node_js:
-  - 'stable'
+- stable
 install: npm install
 services:
-  - postgresql
+- postgresql
 before_script:
-  - npm run db:create:test
+- npm run db:create:test
 script: npm test
 after_success: npm run coverage
+deploy:
+  provider: heroku
+  api_key:
+    secure: your-heroku-encrypted-api-key
+  app: your-heroku-app-name
+  on:
+    repo: your-github-usernam/your-repo
+  run:
+    - "npx sequelize-cli db:migrate"
+    - "npx sequelize-cli db:seed:all"
